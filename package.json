@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "bun run --watch src/assets/layout/*.scss & ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration production",
+    "build:dev": "ng build --configuration development",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
