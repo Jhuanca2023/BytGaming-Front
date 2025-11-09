@@ -1,0 +1,124 @@
+<div class="flex items-center justify-center min-h-[calc(100vh-80px)] w-full overflow-hidden">
+  <p-toast></p-toast>
+  <div class="flex flex-col items-center justify-center w-full max-w-md px-4">
+    <div
+      style="
+        border-radius: 56px;
+        padding: 0.3rem;
+        background: linear-gradient(
+          180deg,
+          var(--primary-color) 10%,
+          rgba(33, 150, 243, 0) 30%
+        );
+      "
+    >
+      <div
+        class="w-full bg-surface-0 dark:bg-surface-900 py-7 px-6 sm:px-12"
+        style="border-radius: 53px"
+      >
+        <div class="text-center mb-4">
+          <div
+            class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-2"
+          >
+            Bienvenido a BitGamer!
+          </div>
+          <span class="text-muted-color font-medium">Crea una nueva cuenta</span>
+        </div>
+        <form (ngSubmit)="register()">
+          <div>
+            <label
+              for="name"
+              class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"
+              >Nombre</label
+            >
+            <input
+              pInputText
+              id="name"
+              type="text"
+              placeholder="Tu nombre"
+              class="w-full mb-3"
+              [(ngModel)]="name"
+              name="name"
+              required
+            />
+
+            <label
+              for="lastName"
+              class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"
+              >Apellido</label
+            >
+            <input
+              pInputText
+              id="lastName"
+              type="text"
+              placeholder="Tu apellido"
+              class="w-full mb-3"
+              [(ngModel)]="lastName"
+              name="lastName"
+              required
+            />
+
+            <label
+              for="email"
+              class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"
+              >Email</label
+            >
+            <input
+              pInputText
+              id="email"
+              type="text"
+              placeholder="Email address"
+              class="w-full mb-3"
+              [(ngModel)]="email"
+              name="email"
+              required
+            />
+
+            <label
+              for="password"
+              class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2"
+              >Contraseña</label
+            >
+            <p-password
+              id="password"
+              [(ngModel)]="password"
+              placeholder="Password"
+              [toggleMask]="true"
+              styleClass="mb-3"
+              [fluid]="true"
+              [feedback]="true"
+              name="password"
+              required
+            ></p-password>
+
+            <div class="flex items-center mb-3">
+              <p-checkbox
+                [(ngModel)]="checked"
+                id="terms"
+                binary
+                class="mr-2"
+                name="terms"
+              ></p-checkbox>
+              <label for="terms">Acepto los términos y condiciones</label>
+            </div>
+
+            <div class="flex items-center justify-end mt-1 mb-3">
+              <span
+                class="font-medium no-underline text-right cursor-pointer text-primary"
+                routerLink="/auth/login"
+                >¿Ya tienes cuenta?</span
+              >
+            </div>
+
+            <p-button
+              type="submit"
+              label="Registrarse"
+              styleClass="w-full"
+              [loading]="loading"
+            ></p-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

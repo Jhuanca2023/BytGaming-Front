@@ -1,0 +1,60 @@
+<div class="layout-topbar">
+  <div class="layout-topbar-logo-container">
+    <button
+      class="layout-menu-button layout-topbar-action"
+      (click)="layoutService.onMenuToggle()"
+    >
+      <i class="pi pi-bars"></i>
+    </button>
+    <a class="layout-topbar-logo" routerLink="/">
+
+      <span>BytGaming</span>
+    </a>
+  </div>
+
+  <div class="layout-topbar-actions">
+    <div class="layout-config-menu">
+      <button
+        type="button"
+        class="layout-topbar-action"
+        (click)="toggleDarkMode()"
+      >
+        <i
+          [ngClass]="{
+            'pi ': true,
+            'pi-moon': layoutService.isDarkTheme(),
+            'pi-sun': !layoutService.isDarkTheme()
+          }"
+        ></i>
+      </button>
+    </div>
+
+    @if (authService.isAuthenticated()) {
+      <div class="layout-topbar-menu">
+        <div class="layout-topbar-menu-content">
+          <p-menu 
+            [model]="userMenuItems()" 
+            [popup]="true" 
+            #userMenu
+            [style]="{ width: '15rem' }"
+          >
+          </p-menu>
+          <button 
+            type="button" 
+            class="layout-topbar-action user-menu-button"
+            (click)="userMenu.toggle($event)"
+            [title]="currentUserEmail()"
+          >
+            <p-avatar 
+              [label]="userInitials()" 
+              styleClass="mr-2" 
+              shape="circle"
+              size="normal"
+            ></p-avatar>
+            <span class="user-email hidden lg:inline-block">{{ currentUserEmail() }}</span>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

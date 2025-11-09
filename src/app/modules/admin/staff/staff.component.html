@@ -1,0 +1,210 @@
+<p-toolbar styleClass="mb-6">
+  <ng-template pTemplate="start">
+    <p-button
+      label="New"
+      icon="pi pi-plus"
+      severity="secondary"
+      class="mr-2"
+      (onClick)="openNew()"
+      [disabled]="loading()"
+    />
+    <p-button
+      severity="secondary"
+      label="Delete"
+      icon="pi pi-trash"
+      outlined
+      (onClick)="deleteSelectedStaff()"
+      [disabled]="!selectedStaff || !selectedStaff.length || loading()"
+    />
+  </ng-template>
+</p-toolbar>
+
+<!-- Show skeleton during loading -->
+<table-skeleton
+  *ngIf="loading()"
+  [rowCount]="5"
+  [columnCount]="6"
+></table-skeleton>
+
+<!-- Show actual table when not loading -->
+<p-table
+  #dt
+  *ngIf="!loading()"
+  [value]="staff()"
+  [rows]="10"
+  [columns]="cols"
+  [paginator]="true"
+  [globalFilterFields]="['name', 'email', 'post']"
+  [tableStyle]="{ 'min-width': '75rem' }"
+  [(selection)]="selectedStaff"
+  [rowHover]="true"
+  dataKey="id"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} staff members"
+  [showCurrentPageReport]="true"
+  [rowsPerPageOptions]="[10, 20, 30]"
+>
+  <ng-template pTemplate="caption">
+    <div class="flex items-center justify-between">
+      <h5 class="m-0">Administrador de Personal</h5>
+      <p-iconfield>
+        <p-inputicon styleClass="pi pi-search" />
+        <input
+          pInputText
+          type="text"
+          (input)="onGlobalFilter(dt, $event)"
+          placeholder="Search..."
+        />
+      </p-iconfield>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 3rem">
+        <p-tableHeaderCheckbox />
+      </th>
+      <th pSortableColumn="id" style="min-width: 5rem">
+        ID
+        <p-sortIcon field="id" />
+      </th>
+      <th pSortableColumn="name" style="min-width: 16rem">
+        Name
+        <p-sortIcon field="name" />
+      </th>
+      <th pSortableColumn="email" style="min-width: 16rem">
+        Email
+        <p-sortIcon field="email" />
+      </th>
+      <th pSortableColumn="post" style="min-width: 10rem">
+        Position
+        <p-sortIcon field="post" />
+      </th>
+      <th style="min-width: 10rem">Actions</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-staffMember>
+    <tr>
+      <td style="width: 3rem">
+        <p-tableCheckbox [value]="staffMember" />
+      </td>
+      <td style="min-width: 5rem">{{ staffMember.id }}</td>
+      <td style="min-width: 16rem">{{ staffMember.name }}</td>
+      <td style="min-width: 16rem">{{ staffMember.email }}</td>
+      <td style="min-width: 10rem">
+        <p-tag
+          [value]="staffMember.post"
+          [severity]="getPostSeverity(staffMember.post)"
+        />
+      </td>
+      <td>
+        <div class="flex">
+          <p-button
+            icon="pi pi-pencil"
+            class="mr-2"
+            [rounded]="true"
+            [outlined]="true"
+            (click)="editStaff(staffMember)"
+            [disabled]="loading()"
+          />
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [rounded]="true"
+            [outlined]="true"
+            (click)="deleteStaff(staffMember)"
+            class="mr-2"
+            [disabled]="loading()"
+          />
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="6" class="text-center p-4">No staff members found.</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- Dialog for adding/editing staff -->
+<p-dialog
+  [(visible)]="staffDialog"
+  [style]="{ width: '450px' }"
+  [header]="staffMember.id ? 'Edit Staff Member' : 'New Staff Member'"
+  [modal]="true"
+  [closable]="!loading()"
+  [closeOnEscape]="!loading()"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <div class="flex flex-col gap-4">
+      <div class="field">
+        <label for="name" class="block font-bold mb-2">Name</label>
+        <input
+          type="text"
+          pInputText
+          id="name"
+          [(ngModel)]="staffRequest.name"
+          required
+          autofocus
+          class="w-full"
+          [disabled]="loading()"
+        />
+        <small class="text-red-500" *ngIf="submitted && !staffRequest.name"
+          >Name is required.</small
+        >
+      </div>
+
+      <div class="field">
+        <label for="email" class="block font-bold mb-2">Email</label>
+        <input
+          type="email"
+          pInputText
+          id="email"
+          [(ngModel)]="staffRequest.email"
+          required
+          class="w-full"
+          [disabled]="loading()"
+        />
+        <small class="text-red-500" *ngIf="submitted && !staffRequest.email"
+          >Email is required.</small
+        >
+      </div>
+
+      <div class="field">
+        <label for="post" class="block font-bold mb-2">Position</label>
+        <p-select
+          [(ngModel)]="staffRequest.post"
+          inputId="post"
+          [options]="positions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select a position"
+          class="w-full"
+          [disabled]="loading()"
+        ></p-select>
+        <small class="text-red-500" *ngIf="submitted && !staffRequest.post"
+          >Position is required.</small
+        >
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Cancel"
+      icon="pi pi-times"
+      styleClass="p-button-text"
+      (click)="hideDialog()"
+      [disabled]="loading()"
+    ></p-button>
+    <p-button
+      label="Save"
+      icon="pi pi-check"
+      (click)="saveStaff()"
+      [loading]="loading()"
+    ></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

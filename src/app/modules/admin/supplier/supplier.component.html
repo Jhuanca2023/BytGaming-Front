@@ -1,0 +1,269 @@
+<p-toolbar styleClass="mb-6">
+  <ng-template pTemplate="start">
+    <p-button
+      label="New"
+      icon="pi pi-plus"
+      severity="secondary"
+      class="mr-2"
+      (onClick)="openNew()"
+      [disabled]="loading()"
+    />
+    <p-button
+      severity="secondary"
+      label="Delete"
+      icon="pi pi-trash"
+      outlined
+      (onClick)="deleteSelectedSuppliers()"
+      [disabled]="!selectedSuppliers || !selectedSuppliers.length || loading()"
+    />
+  </ng-template>
+</p-toolbar>
+
+<!-- Show skeleton during loading -->
+<table-skeleton
+  *ngIf="loading()"
+  [rowCount]="5"
+  [columnCount]="8"
+></table-skeleton>
+
+<!-- Show actual table when not loading -->
+<p-table
+  #dt
+  *ngIf="!loading()"
+  [value]="suppliers()"
+  [rows]="10"
+  [columns]="cols"
+  [paginator]="true"
+  [globalFilterFields]="['name', 'ruc', 'email', 'phone']"
+  [tableStyle]="{ 'min-width': '75rem' }"
+  [(selection)]="selectedSuppliers"
+  [rowHover]="true"
+  dataKey="id"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} suppliers"
+  [showCurrentPageReport]="true"
+  [rowsPerPageOptions]="[10, 20, 30]"
+>
+  <ng-template pTemplate="caption">
+    <div class="flex items-center justify-between">
+      <h5 class="m-0">Administracion de Proveedores</h5>
+      <p-iconfield>
+        <p-inputicon styleClass="pi pi-search" />
+        <input
+          pInputText
+          type="text"
+          (input)="onGlobalFilter(dt, $event)"
+          placeholder="Search..."
+        />
+      </p-iconfield>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 3rem">
+        <p-tableHeaderCheckbox />
+      </th>
+      <th pSortableColumn="id" style="min-width: 5rem">
+        ID
+        <p-sortIcon field="id" />
+      </th>
+      <th pSortableColumn="name" style="min-width: 16rem">
+        Name
+        <p-sortIcon field="name" />
+      </th>
+      <th pSortableColumn="ruc" style="min-width: 12rem">
+        RUC
+        <p-sortIcon field="ruc" />
+      </th>
+      <th pSortableColumn="email" style="min-width: 16rem">
+        Email
+        <p-sortIcon field="email" />
+      </th>
+      <th pSortableColumn="phone" style="min-width: 10rem">
+        Phone
+        <p-sortIcon field="phone" />
+      </th>
+      <th pSortableColumn="isActive" style="min-width: 8rem">
+        Status
+        <p-sortIcon field="isActive" />
+      </th>
+      <th style="min-width: 10rem">Actions</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-supplier>
+    <tr>
+      <td style="width: 3rem">
+        <p-tableCheckbox [value]="supplier" />
+      </td>
+      <td style="min-width: 5rem">{{ supplier.id }}</td>
+      <td style="min-width: 16rem">{{ supplier.name }}</td>
+      <td style="min-width: 12rem">{{ supplier.ruc }}</td>
+      <td style="min-width: 16rem">{{ supplier.email }}</td>
+      <td style="min-width: 10rem">{{ supplier.phone }}</td>
+      <td style="min-width: 8rem">
+        <p-tag
+          [value]="supplier.isActive ? 'Active' : 'Inactive'"
+          [severity]="getSeverity(supplier.isActive)"
+        />
+      </td>
+      <td>
+        <div class="flex">
+          <p-button
+            icon="pi pi-pencil"
+            class="mr-2"
+            [rounded]="true"
+            [outlined]="true"
+            (click)="editSupplier(supplier)"
+            [disabled]="loading()"
+          />
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [rounded]="true"
+            [outlined]="true"
+            (click)="deleteSupplier(supplier)"
+            class="mr-2"
+            [disabled]="loading()"
+          />
+          <p-button
+            [icon]="supplier.isActive ? 'pi pi-times' : 'pi pi-check'"
+            [severity]="supplier.isActive ? 'warn' : 'success'"
+            [rounded]="true"
+            [outlined]="true"
+            (click)="toggleStatus(supplier)"
+            pTooltip="{{ supplier.isActive ? 'Deactivate' : 'Activate' }}"
+            tooltipPosition="top"
+            [disabled]="loading()"
+          />
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="8" class="text-center p-4">No suppliers found.</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  [(visible)]="supplierDialog"
+  [style]="{ width: '450px' }"
+  [header]="supplier.id ? 'Edit Supplier' : 'New Supplier'"
+  [modal]="true"
+  [closable]="!loading()"
+  [closeOnEscape]="!loading()"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <div class="flex flex-col gap-4">
+      <div class="field">
+        <label for="name" class="block font-bold mb-2">Name</label>
+        <input
+          type="text"
+          pInputText
+          id="name"
+          [(ngModel)]="supplierRequest.name"
+          required
+          autofocus
+          class="w-full"
+          [disabled]="loading()"
+        />
+        <small class="text-red-500" *ngIf="submitted && !supplierRequest.name"
+          >Name is required.</small
+        >
+      </div>
+
+      <div class="field">
+        <label for="ruc" class="block font-bold mb-2">RUC</label>
+        <input
+          type="text"
+          pInputText
+          id="ruc"
+          [(ngModel)]="supplierRequest.ruc"
+          required
+          class="w-full"
+          [disabled]="loading()"
+        />
+        <small class="text-red-500" *ngIf="submitted && !supplierRequest.ruc"
+          >RUC is required.</small
+        >
+      </div>
+
+      <div class="field">
+        <label for="email" class="block font-bold mb-2">Email</label>
+        <input
+          type="email"
+          pInputText
+          id="email"
+          [(ngModel)]="supplierRequest.email"
+          required
+          class="w-full"
+          [disabled]="loading()"
+        />
+        <small class="text-red-500" *ngIf="submitted && !supplierRequest.email"
+          >Email is required.</small
+        >
+      </div>
+
+      <div class="field">
+        <label for="phone" class="block font-bold mb-2">Phone</label>
+        <input
+          type="tel"
+          pInputText
+          id="phone"
+          [(ngModel)]="supplierRequest.phone"
+          required
+          class="w-full"
+          [disabled]="loading()"
+        />
+        <small class="text-red-500" *ngIf="submitted && !supplierRequest.phone"
+          >Phone is required.</small
+        >
+      </div>
+
+      <div class="field" *ngIf="supplier.id">
+        <label class="block font-bold mb-2">Status</label>
+        <div class="flex align-items-center">
+          <p-radioButton
+            name="isActive"
+            [value]="true"
+            [(ngModel)]="supplierRequest.isActive"
+            inputId="active"
+            [disabled]="loading()"
+          >
+          </p-radioButton>
+          <label for="active" class="ml-2 mr-4">Active</label>
+
+          <p-radioButton
+            name="isActive"
+            [value]="false"
+            [(ngModel)]="supplierRequest.isActive"
+            inputId="inactive"
+            [disabled]="loading()"
+          >
+          </p-radioButton>
+          <label for="inactive" class="ml-2">Inactive</label>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Cancel"
+      icon="pi pi-times"
+      styleClass="p-button-text"
+      (click)="hideDialog()"
+      [disabled]="loading()"
+    ></p-button>
+    <p-button
+      label="Save"
+      icon="pi pi-check"
+      (click)="saveSupplier()"
+      [loading]="loading()"
+    ></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
