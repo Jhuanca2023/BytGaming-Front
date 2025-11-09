@@ -1,1 +1,36 @@
-# Bytgaming
+# BytGaming Frontend
+
+Aplicación frontend desarrollada con Angular para el sistema de gestión de gaming BytGaming.
+
+## Tecnologías
+
+- Angular 19
+- PrimeNG
+- TailwindCSS
+- Bun
+
+## Desarrollo
+
+### Instalación
+
+```bash
+bun install
+```
+
+### Ejecutar en desarrollo
+
+```bash
+bun run start
+```
+
+### Build para producción
+
+```bash
+bun run build
+```
+
+## Estructura de ramas
+
+- `main`: Rama de producción
+- `develop`: Rama de desarrollo
+- `feature/*`: Ramas de características
