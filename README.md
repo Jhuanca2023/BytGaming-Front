@@ -91,11 +91,17 @@ Este proyecto está configurado para desplegarse automáticamente en Netlify cua
 3. Haz clic en **"Add new site"** > **"Import an existing project"**
 4. Selecciona **"GitHub"** y autoriza Netlify
 5. Selecciona el repositorio: `Jhuanca2023/BytGaming-Front`
-6. Netlify detectará automáticamente la configuración desde `netlify.toml`
+6. **IMPORTANTE**: Asegúrate de seleccionar tu cuenta personal (**Jhuanca2023**), NO el equipo "Foodtrux"
+7. Netlify detectará automáticamente la configuración desde `netlify.toml`
+8. Verifica que el directorio de publicación sea: `dist/bytgaming/browser`
 
 **Paso 2: Configurar variables de entorno (si es necesario)**
-1. En Netlify, ve a **Site settings** > **Environment variables**
-2. Agrega las variables de entorno necesarias para producción
+1. En Netlify, ve a tu sitio (NO a Team settings)
+2. Haz clic en **Site settings** (Configuración del sitio)
+3. En el menú lateral, haz clic en **Environment variables** (Variables de entorno)
+4. Haz clic en **"Add a variable"** (Agregar variable)
+5. Agrega las variables necesarias (ej: `API_URL`, `API_KEY`, etc.)
+6. **IMPORTANTE**: Asegúrate de estar en la configuración del SITIO, no del TEAM
 
 **Paso 3: Configurar secrets en GitHub (para despliegue automático)**
 1. Ve a: https://github.com/Jhuanca2023/BytGaming-Front/settings/secrets/actions
@@ -115,7 +121,7 @@ Este proyecto está configurado para desplegarse automáticamente en Netlify cua
 
 - **Archivo de configuración**: `netlify.toml`
 - **Comando de build**: `bun install && bun run build`
-- **Directorio de publicación**: `dist/bytgaming`
+- **Directorio de publicación**: `dist/bytgaming/browser`
 - **Node.js version**: 20
 
 ### Despliegue manual
@@ -130,5 +136,5 @@ npm install -g netlify-cli
 netlify login
 
 # Desplegar
-netlify deploy --prod --dir=dist/bytgaming
+netlify deploy --prod --dir=dist/bytgaming/browser
 ```
