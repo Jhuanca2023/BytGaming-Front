@@ -31,6 +31,10 @@ reviews:
   
   review_status: true
   collapse_when_empty: true
+  base_branches:
+    - main
+    - develop
+    - master
 
 chat:
   auto_review:
@@ -38,6 +42,7 @@ chat:
     base_branches:
       - main
       - develop
+      - master
   auto_description:
     enabled: true
 
@@ -46,6 +51,10 @@ pull_requests:
     - code-review
   status_update:
     enabled: true
+  base_branches:
+    - main
+    - develop
+    - master
 
 ignore:
   - "node_modules/**"
@@ -54,4 +63,3 @@ ignore:
   - "**.test.ts"
   - "package-lock.json"
   - "bun.lock"
-
