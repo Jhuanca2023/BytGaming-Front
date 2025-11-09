@@ -1,0 +1,57 @@
+language:
+  typescript:
+    review_as_package: false
+    path_filters:
+      - "src/**/*.ts"
+      - "src/**/*.tsx"
+  
+  scss:
+    path_filters:
+      - "src/**/*.scss"
+
+language_override:
+  typescript:
+    high_level_summary: true
+    improve_code_quality: true
+    show_security_issues: true
+    show_performance_issues: true
+    show_accessibility_issues: true
+    show_code_suggestions: true
+
+reviews:
+  path_filters:
+    - "src/**/*.ts"
+    - "src/**/*.html"
+    - "src/**/*.scss"
+  exclude_paths:
+    - "node_modules/**"
+    - "dist/**"
+    - "**.spec.ts"
+    - "**.test.ts"
+  
+  review_status: true
+  collapse_when_empty: true
+
+chat:
+  auto_review:
+    enabled: true
+    base_branches:
+      - main
+      - develop
+  auto_description:
+    enabled: true
+
+pull_requests:
+  labels:
+    - code-review
+  status_update:
+    enabled: true
+
+ignore:
+  - "node_modules/**"
+  - "dist/**"
+  - "**.spec.ts"
+  - "**.test.ts"
+  - "package-lock.json"
+  - "bun.lock"
+
