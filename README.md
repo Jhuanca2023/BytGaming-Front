@@ -91,17 +91,26 @@ Este proyecto está configurado para desplegarse automáticamente en Netlify cua
 3. Haz clic en **"Add new site"** > **"Import an existing project"**
 4. Selecciona **"GitHub"** y autoriza Netlify
 5. Selecciona el repositorio: `Jhuanca2023/BytGaming-Front`
-6. **IMPORTANTE**: Asegúrate de seleccionar tu cuenta personal (**Jhuanca2023**), NO el equipo "Foodtrux"
-7. Netlify detectará automáticamente la configuración desde `netlify.toml`
-8. Verifica que el directorio de publicación sea: `dist/bytgaming/browser`
+6. Netlify detectará automáticamente la configuración desde `netlify.toml`
 
-**Paso 2: Configurar variables de entorno (si es necesario)**
-1. En Netlify, ve a tu sitio (NO a Team settings)
-2. Haz clic en **Site settings** (Configuración del sitio)
-3. En el menú lateral, haz clic en **Environment variables** (Variables de entorno)
-4. Haz clic en **"Add a variable"** (Agregar variable)
-5. Agrega las variables necesarias (ej: `API_URL`, `API_KEY`, etc.)
-6. **IMPORTANTE**: Asegúrate de estar en la configuración del SITIO, no del TEAM
+**Paso 2: Configurar variables de entorno (OBLIGATORIO)**
+
+**IMPORTANTE**: Las variables de entorno deben tener el prefijo `NG_APP_` para funcionar con Angular.
+
+1. En la página de configuración de Netlify, haz clic en **"Add environment variables"**
+2. Agrega las siguientes variables (las mismas que tienes en tu archivo `.env` local):
+   - **Key**: `NG_APP_API_URL`
+     - **Value**: URL de tu API en producción (ej: `https://api.bytgaming.com` o `https://tu-backend.railway.app`)
+   - Si tienes más variables en tu `.env`, agréguelas con el prefijo `NG_APP_`
+     - Ejemplo: Si en tu `.env` tienes `API_URL=http://localhost:8081`
+     - En Netlify debe ser: `NG_APP_API_URL=https://tu-api-produccion.com`
+
+3. **Nota**: El archivo `.env` local no se sube a GitHub (está en `.gitignore`)
+4. Las variables en Netlify solo se aplican durante el build, no en runtime
+
+**Variables de entorno comunes:**
+- `NG_APP_API_URL`: URL del backend API (obligatorio para producción)
+- Cualquier otra variable que uses en tu código debe tener el prefijo `NG_APP_`
 
 **Paso 3: Configurar secrets en GitHub (para despliegue automático)**
 1. Ve a: https://github.com/Jhuanca2023/BytGaming-Front/settings/secrets/actions
@@ -123,6 +132,7 @@ Este proyecto está configurado para desplegarse automáticamente en Netlify cua
 - **Comando de build**: `bun install && bun run build`
 - **Directorio de publicación**: `dist/bytgaming/browser`
 - **Node.js version**: 20
+- **Variables de entorno**: Deben tener el prefijo `NG_APP_` (ej: `NG_APP_API_URL`)
 
 ### Despliegue manual
 
