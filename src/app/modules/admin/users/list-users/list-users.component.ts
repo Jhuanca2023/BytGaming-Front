@@ -269,12 +269,14 @@ export class ListUsersComponent {
 
     if (this.user) {
       // Update existing user
-      // Convert role to roleRequest format for backend
+      // For PUT /auth/{id}, backend expects role directly as string (RoleEnum)
       const updateRequest: RegisterRequest = {
-        ...this.userRequest,
-        roleRequest: this.userRequest.role ? {
-          roleListName: this.userRequest.role
-        } : undefined
+        email: this.userRequest.email,
+        name: this.userRequest.name,
+        lastName: this.userRequest.lastName,
+        role: this.userRequest.role,
+        // Only include password if it was provided
+        ...(this.userRequest.password && { password: this.userRequest.password })
       };
       
       this.userService.updateUser(this.user.id, updateRequest)
