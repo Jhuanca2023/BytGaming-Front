@@ -41,23 +41,40 @@ export class AuthService {
     });
   }
   register(userData: RegisterRequest): Observable<any> {
-  return this.http.post<any>(`${this.baseUrl}/auth/sign`, userData)
-    .pipe(
-      map(response => {
-        return {
-          success: true,
-          ...response
-        };
-      }),
-      catchError(error => {
-        console.error('Registration error:', error);
-        return of({
-          success: false,
-          message: error.error?.message || 'Error en el registro'
-        });
-      })
-    );
-}
+    console.log('Registering user with data:', userData);
+    console.log('API URL:', `${this.baseUrl}/auth/sign`);
+    
+    return this.http.post<any>(`${this.baseUrl}/auth/sign`, userData)
+      .pipe(
+        map(response => {
+          console.log('Registration response:', response);
+          return {
+            success: true,
+            ...response
+          };
+        }),
+        catchError(error => {
+          console.error('Registration error:', error);
+          console.error('Error status:', error?.status);
+          console.error('Error message:', error?.message);
+          console.error('Error URL:', error?.url);
+          console.error('Error details:', error?.error);
+          
+          // Si es error 0, significa que no se pudo conectar
+          if (error?.status === 0) {
+            return of({
+              success: false,
+              message: 'No se pudo conectar con el servidor. Verifica que el backend esté activo.'
+            });
+          }
+          
+          return of({
+            success: false,
+            message: error.error?.message || error?.message || 'Error en el registro'
+          });
+        })
+      );
+  }
 
 
   login(email: string, password: string): Observable<AuthModel> {

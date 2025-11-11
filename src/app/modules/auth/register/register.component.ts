@@ -67,7 +67,9 @@ export class RegisterComponent {
       password: this.password,
       name: this.name,
       lastName: this.lastName,
-      role: "USER" // Note the quotes, making it a literal type
+      roleRequest: {
+        roleListName: "USER"
+      }
     };
 
     this.authService.register(userData)
