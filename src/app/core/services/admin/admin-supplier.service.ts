@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { SupplierModel } from '../../model/supplier.model';
 import { catchError, Observable, throwError } from 'rxjs';
 import { SupplierRequest } from '../../interfaces/supplier-http.interface';

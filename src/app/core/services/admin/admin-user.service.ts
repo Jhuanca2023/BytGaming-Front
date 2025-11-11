@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {inject, Injectable} from '@angular/core';
-import {environment} from '../../../../environments/environment.development';
+import {environment} from '../../../../environments/environment';
 import {Observable} from 'rxjs';
 import {UserModel} from '../../model/user.model';
 import {RegisterRequest} from '../../interfaces/auth-http.interface';
