@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { Observable, catchError, throwError } from 'rxjs';
 import { StaffModel } from '../../model/staff.model';
 import { StaffPost, StaffRequest } from '../../interfaces/staff-http.interface';

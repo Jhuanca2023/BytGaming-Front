@@ -73,7 +73,7 @@ export class LoginComponent {
           this.messageService.add({
             severity: 'error',
             summary: 'Error de conexión',
-            detail: error?.message || 'No se pudo conectar con el servidor. Verifica que el backend esté corriendo en http://localhost:8081'
+            detail: error?.message || 'No se pudo conectar con el servidor. Verifica tu conexión a internet.'
           });
         }
       });

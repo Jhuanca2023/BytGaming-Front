@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { AuthState, JwtPayload, RegisterRequest } from '../interfaces/auth-http.interface';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
