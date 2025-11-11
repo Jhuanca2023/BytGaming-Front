@@ -1,9 +1,12 @@
 export interface RegisterRequest {
-  email?: string;
+  email: string;
   password?: string;
-  name?: string;
-  lastName?: string;
-  role?: "ADMIN" | "USER"
+  name: string;
+  lastName: string;
+  role?: "ADMIN" | "USER";
+  roleRequest?: {
+    roleListName?: string;
+  };
 }
 
 export interface AuthResponse {

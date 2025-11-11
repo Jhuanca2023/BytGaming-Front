@@ -165,6 +165,7 @@ export class ListUsersComponent {
       name: user.name || '',
       lastName: user.lastName || '',
       email: user.email,
+      password: '',
       role: user.role.roleEnum as "ADMIN" | "USER"
     };
     this.userDialog = true;
@@ -268,7 +269,15 @@ export class ListUsersComponent {
 
     if (this.user) {
       // Update existing user
-      this.userService.updateUser(this.user.id, this.userRequest)
+      // Convert role to roleRequest format for backend
+      const updateRequest: RegisterRequest = {
+        ...this.userRequest,
+        roleRequest: this.userRequest.role ? {
+          roleListName: this.userRequest.role
+        } : undefined
+      };
+      
+      this.userService.updateUser(this.user.id, updateRequest)
         .pipe(finalize(() => this.loadingService.stopLoading(this.COMPONENT_ID)))
         .subscribe({
           next: () => {
